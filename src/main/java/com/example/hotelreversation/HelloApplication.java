@@ -1,5 +1,10 @@
 package com.example.hotelreversation;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -10,19 +15,21 @@ import javafx.scene.control.TextField;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-     //**************login page
+        //**************login page
 
         VBox vbox = new VBox();
         vbox.setSpacing(8);
@@ -54,24 +61,41 @@ public class HelloApplication extends Application {
         textField.setFont(Font.font(15));
         VBox.setMargin(textField, new Insets(2, 5, 0, 0));  // Margin around the text field
 
+
         //passoword and input
         Label label2 = new Label("Password");
         label2.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         VBox.setMargin(label2, new Insets(10, 5, 5, 65));  // Margin around the label
 
-        PasswordField passwordField= new PasswordField();
+        PasswordField passwordField = new PasswordField();
         passwordField.setFont(Font.font(15));
         VBox.setMargin(passwordField, new Insets(5, 0, 0, 0));  // Margin around the text field
 
         //Login Button
-        Button loginbutton= new Button("LOGIN");
+        Button loginbutton = new Button("LOGIN");
         // Styling the button
         loginbutton.setTextFill(Color.WHITE); // Setting text color
         loginbutton.setStyle("-fx-background-color: dodgerblue; " + // Setting background color
                 "-fx-font-size: 14pt; " + // Setting font size
                 "-fx-cursor: hand;"); // Changing mouse pointer to hand
+        loginbutton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                String username = textField.getText();
+                String password = passwordField.getText();
+
+                if (password.equals("pass123") && username.equals("Admin")) {
+                    Scene secondscene = SecondScene.secondScene();
+                    stage.setScene(secondscene);
+                    stage.show();
+                } else {
+                    showToast(vbox, textField,"Invalid username or password");
+                }
+            }
+        });
+
         // Adding above controls to the vbox
-        vbox.getChildren().addAll(hotelname,hotellogo,label1,textField,label2,passwordField,loginbutton);
+        vbox.getChildren().addAll(hotelname, hotellogo, label1, textField, label2, passwordField, loginbutton);
         // Increase left margin of loginbutton by 50 pixels
         VBox.setMargin(loginbutton, new Insets(0, 0, 0, 70));
 
@@ -105,4 +129,19 @@ public class HelloApplication extends Application {
     public static void main(String[] args) {
         launch();
     }
+    public void showToast(VBox vbox,TextField textField, String message) {
+        // Create a label for the toast message
+      Label toast= new Label(message);
+      toast.setTextFill(Color.RED);
+      vbox.getChildren().add(toast);
+        textField.setOnKeyTyped(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                vbox.getChildren().remove(toast);
+            }
+        });
+
+
+    }
+
 }
