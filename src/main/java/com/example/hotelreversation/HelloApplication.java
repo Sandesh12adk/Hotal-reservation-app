@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -89,7 +90,7 @@ public class HelloApplication extends Application {
                     stage.setScene(secondscene);
                     stage.show();
                 } else {
-                    showToast(vbox, textField,"Invalid username or password");
+                    showtoast(vbox, textField, "Invalid username or password");
                 }
             }
         });
@@ -129,19 +130,39 @@ public class HelloApplication extends Application {
     public static void main(String[] args) {
         launch();
     }
-    public void showToast(VBox vbox,TextField textField, String message) {
-        // Create a label for the toast message
-      Label toast= new Label(message);
-      toast.setTextFill(Color.RED);
-      vbox.getChildren().add(toast);
-        textField.setOnKeyTyped(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                vbox.getChildren().remove(toast);
+
+        private Label toast = null; // Initialize toast to null
+
+        public void showtoast(VBox vbox, TextField textField, String message) {
+            if (toast == null) {
+                // Create the toast label only if it is not already created
+                toast = new Label(message);
+                toast.setTextFill(Color.RED);
+                vbox.getChildren().add(toast);
+            } 
+
+            // Remove toast when user interacts with textField
+            textField.setOnKeyTyped(event -> {
+                fadeOutAndRemove();
+            });
+        }
+
+        private void fadeOutAndRemove() {
+            if (toast != null) {
+                Timeline timeline = new Timeline();
+                timeline.getKeyFrames().addAll(
+                        new KeyFrame(Duration.ZERO, new KeyValue(toast.opacityProperty(), 1.0)),
+                        new KeyFrame(Duration.seconds(1), new KeyValue(toast.opacityProperty(), 0.0))
+                );
+                timeline.setOnFinished(event -> {
+                    VBox parent = (VBox) toast.getParent();
+                    if (parent != null) {
+                        parent.getChildren().remove(toast);
+                        toast = null; // Reset toast to null after removal
+                    }
+                });
+                timeline.play();
             }
-        });
-
-
-    }
+        }
 
 }
