@@ -1,0 +1,108 @@
+package com.example.hotelreversation;
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+
+public class HelloApplication extends Application {
+    @Override
+    public void start(Stage stage) throws IOException {
+     //**************login page
+
+        VBox vbox = new VBox();
+        vbox.setSpacing(8);
+        vbox.setPadding(new Insets(10, 0, 20, 140));
+
+        //Hotel logo
+        Image Hotelimage1 = new Image(getClass().getResourceAsStream("/logo.jpeg"));
+        ImageView hotellogo = new ImageView(Hotelimage1);
+        ColorAdjust c = new ColorAdjust(); // creating the instance of the ColorAdjust effect.
+        c.setBrightness(0.2); // setting the brightness of the color.
+        c.setContrast(0.1); // setting the contrast of the color
+        c.setHue(0.3); // setting the hue of the color
+        c.setSaturation(0.45); // setting the hue of the color.
+        hotellogo.setEffect(c); //applying effect on the image
+        hotellogo.setFitWidth(255);
+        hotellogo.setFitHeight(200);
+
+        //Hotel Name
+        Label hotelname = new Label("Hotel Kunja ");
+        hotelname.setTextFill(Color.RED);
+        hotelname.setFont(Font.font("Arial", FontWeight.BOLD, 50));
+
+        //username and input
+        Label label1 = new Label("UserName");
+        label1.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        VBox.setMargin(label1, new Insets(20, 5, 5, 65));  // Margin around the label
+
+        TextField textField = new TextField();
+        textField.setFont(Font.font(15));
+        VBox.setMargin(textField, new Insets(2, 5, 0, 0));  // Margin around the text field
+
+        //passoword and input
+        Label label2 = new Label("Password");
+        label2.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        VBox.setMargin(label2, new Insets(10, 5, 5, 65));  // Margin around the label
+
+        PasswordField passwordField= new PasswordField();
+        passwordField.setFont(Font.font(15));
+        VBox.setMargin(passwordField, new Insets(5, 0, 0, 0));  // Margin around the text field
+
+        //Login Button
+        Button loginbutton= new Button("LOGIN");
+        // Styling the button
+        loginbutton.setTextFill(Color.WHITE); // Setting text color
+        loginbutton.setStyle("-fx-background-color: dodgerblue; " + // Setting background color
+                "-fx-font-size: 14pt; " + // Setting font size
+                "-fx-cursor: hand;"); // Changing mouse pointer to hand
+        // Adding above controls to the vbox
+        vbox.getChildren().addAll(hotelname,hotellogo,label1,textField,label2,passwordField,loginbutton);
+        // Increase left margin of loginbutton by 50 pixels
+        VBox.setMargin(loginbutton, new Insets(0, 0, 0, 70));
+
+
+        // ****** Side image of hotel login page*****
+        HBox hbox = new HBox();
+        // Load the image from the resources
+        Image Hotelimage = new Image(getClass().getResourceAsStream("/final.jpg"));
+        ImageView imageView1 = new ImageView(Hotelimage);
+        imageView1.setFitWidth(500);
+        imageView1.setFitHeight(700);
+        hbox.getChildren().addAll(imageView1);
+
+        // Everything inside the main Hbox
+        HBox root = new HBox();
+        root.getChildren().addAll(hbox, vbox);
+
+        // ************ Create the scene and add the main Hbox in the scene
+        Scene scene = new Scene(root, 900, 1900, Color.HONEYDEW);
+
+        // Set stage properties
+        stage.setScene(scene);
+        stage.setWidth(1000);
+        stage.setHeight(650);
+        stage.setResizable(false); // Make the stage non-resizable
+
+        // Show the stage
+        stage.show();
+    }
+
+    public static void main(String[] args) {
+        launch();
+    }
+}
