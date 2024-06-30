@@ -31,22 +31,15 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         //**************login page
-
         VBox vbox = new VBox();
         vbox.setSpacing(8);
-        vbox.setPadding(new Insets(10, 0, 20, 140));
+        vbox.setPadding(new Insets(10, 0, 20, 10));
 
         //Hotel logo
-        Image Hotelimage1 = new Image(getClass().getResourceAsStream("/logo.jpeg"));
-        ImageView hotellogo = new ImageView(Hotelimage1);
-        ColorAdjust c = new ColorAdjust(); // creating the instance of the ColorAdjust effect.
-        c.setBrightness(0.2); // setting the brightness of the color.
-        c.setContrast(0.1); // setting the contrast of the color
-        c.setHue(0.3); // setting the hue of the color
-        c.setSaturation(0.45); // setting the hue of the color.
-        hotellogo.setEffect(c); //applying effect on the image
-        hotellogo.setFitWidth(255);
-        hotellogo.setFitHeight(200);
+
+            Image Hotelimage1 = new Image(getClass().getResourceAsStream("/logo.jpeg"));
+            ImageView hotellogo = new ImageView(Hotelimage1);
+
 
         //Hotel Name
         Label hotelname = new Label("Hotel Kunja ");
@@ -77,7 +70,7 @@ public class HelloApplication extends Application {
         // Styling the button
         loginbutton.setTextFill(Color.WHITE); // Setting text color
         loginbutton.setStyle("-fx-background-color: dodgerblue; " + // Setting background color
-                "-fx-font-size: 14pt; " + // Setting font size
+                "-fx-font-size: 14pt; " +// Setting font size
                 "-fx-cursor: hand;"); // Changing mouse pointer to hand
         loginbutton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -86,7 +79,9 @@ public class HelloApplication extends Application {
                 String password = passwordField.getText();
 
                 if (password.equals("pass123") && username.equals("Admin")) {
-                    Scene secondscene = SecondScene.secondScene();
+                    Scene secondscene =new SecondScene().secondScene();
+                    stage.setHeight(650);
+                    stage.setWidth(1130);
                     stage.setScene(secondscene);
                     stage.show();
                 } else {
@@ -96,7 +91,7 @@ public class HelloApplication extends Application {
         });
 
         // Adding above controls to the vbox
-        vbox.getChildren().addAll(hotelname, hotellogo, label1, textField, label2, passwordField, loginbutton);
+        vbox.getChildren().addAll(hotelname,hotellogo, label1, textField, label2, passwordField, loginbutton);
         // Increase left margin of loginbutton by 50 pixels
         VBox.setMargin(loginbutton, new Insets(0, 0, 0, 70));
 
@@ -106,7 +101,7 @@ public class HelloApplication extends Application {
         // Load the image from the resources
         Image Hotelimage = new Image(getClass().getResourceAsStream("/final.jpg"));
         ImageView imageView1 = new ImageView(Hotelimage);
-        imageView1.setFitWidth(500);
+        imageView1.setFitWidth(650);
         imageView1.setFitHeight(700);
         hbox.getChildren().addAll(imageView1);
 
@@ -115,11 +110,9 @@ public class HelloApplication extends Application {
         root.getChildren().addAll(hbox, vbox);
 
         // ************ Create the scene and add the main Hbox in the scene
-        Scene scene = new Scene(root, 900, 1900, Color.HONEYDEW);
+       Scene scene = new Scene(root, 900, 1900, Color.RED);
 
-        // Set stage properties
-        stage.setScene(scene);
-        stage.setWidth(1000);
+        stage.setScene(scene);stage.setWidth(1000);
         stage.setHeight(650);
         stage.setResizable(false); // Make the stage non-resizable
 
