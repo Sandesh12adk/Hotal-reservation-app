@@ -7,25 +7,23 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.sql.Connection;
 import java.sql.Statement;
 
 public class NewReservation {
-
     private Label error = null;
     private Label error1 = null;
+    private SecondScene secondScene; // Reference to SecondScene
 
     private TextField textField1;
     private TextField textField2;
@@ -35,6 +33,9 @@ public class NewReservation {
 
 
 
+    public void setSecondScene(SecondScene secondScene) {
+       this.secondScene = secondScene;
+    }
 
     public VBox newReservation(Connection connection) {
         String inputStyle = "-fx-font-family: 'Arial'; -fx-font-size: 18px;";
@@ -79,10 +80,27 @@ public class NewReservation {
         textField5.setStyle(inputStyle);
 
         Button submitButton = new Button("Entry");
+        submitButton.setStyle("-fx-background-color: #007bff; -fx-text-fill: white; -fx-background-radius: 30;");
         submitButton.setTextFill(Color.WHITE);
-        submitButton.setStyle("-fx-background-color: dodgerblue; -fx-font-size: 14pt; -fx-cursor: hand;");
 
-        vBox.getChildren().addAll(hotelname, label1, textField1, label2, textField2, label3, textField3, label4, textField4, label5, textField5, submitButton);
+        // Create back button
+        Button backButton = new Button(" Back");
+        backButton.setStyle("-fx-background-color:FF0000; -fx-text-fill: white; -fx-background-radius: 30;");
+        backButton.setTextFill(Color.WHITE);
+
+
+        // Handle back button action
+        backButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                secondScene.showMainMenu();//In Place of i cannot do this "new SecondScene().showMainMenu();" because
+                /*  State Management: If SecondScene manages any state (like data, UI elements, etc.), a new instance won't have access to
+                that state unless it's explicitly passed or shared somehow. This can lead to inconsistencies or unexpected behavior if
+                 you're expecting continuity in your application's state. */
+            }
+        });
+
+        vBox.getChildren().addAll(hotelname, label1, textField1, label2, textField2, label3, textField3, label4, textField4, label5, textField5, submitButton, backButton);
 
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
