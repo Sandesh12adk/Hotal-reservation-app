@@ -44,6 +44,9 @@ public class NewReservation {
         this.secondScene = secondScene;
     }
 
+    public void setavailablerooms(){
+        availablerooms= new AvailableRooms().avairooms();
+    }
     public StackPane newReservation() {
 
         stackPane = new StackPane();
@@ -125,7 +128,8 @@ public class NewReservation {
             public void handle(ActionEvent actionEvent) {
                 /////////////////////Hbox lai yeah initialze gareko xa hai Available rooms hold gareko HBox
                 ///////////Available rooms ko Arraylist*******************************************************************
-                availablerooms= new AvailableRooms().avairooms();
+              //  availablerooms= new AvailableRooms().avairooms();
+                setavailablerooms();
                 flowPane = new AvailableRooms().displayAvailableRooms();
                 flowPane.getChildren().add(okButton);
                 stackPane.getChildren().clear(); // Clear existing content in stackPane
@@ -158,7 +162,7 @@ public class NewReservation {
 
                 // Validate mobile number format (10 digits)
                 boolean validMobileNumber = mobilenumber.matches("\\d{10}");
-
+                availablerooms= new AvailableRooms().avairooms();
                 // Validate room number
                 boolean validRoom = false;
                 for(Integer room: availablerooms){
@@ -195,7 +199,7 @@ public class NewReservation {
 
 
 
-//        flowPane = new AvailableRooms().displayAvailableRooms();
+//      flowPane = new AvailableRooms().displayAvailableRooms();
         stackPane.getChildren().add(vBox);
         return stackPane;
     }
@@ -257,9 +261,10 @@ class SubmitClass extends Thread {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, roomnoo); // Use setInt() for integer values
             pstmt.executeUpdate();
-            connection.close();
             statement.close();//*****************************************************************************
+            connection.close();
             showSuccessMessage();
+            new NewReservation().setavailablerooms();
             System.out.println("Successfully submitted to database");
 
         } catch (Exception e) {
