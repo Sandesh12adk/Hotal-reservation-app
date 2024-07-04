@@ -21,20 +21,21 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class SecondScene {
-    private Connection connection = null;
+   // private Connection connection = null;
     private final String url = "jdbc:mysql://localhost:3306/hotelinfo";
     private final String user = "Admin";
     private final String password = "pass123";
+    private String buttonStyle;
 
     private StackPane mainStackpane;
-    private VBox vbox1 = null;
+    private StackPane vbox1 = null;  // nam cahi vbox1 nai rakhya hai change gharna jhau xa.
     private HBox mainHBox;
     private StackPane stackPane;
     private VBox ButtonsVBox;
+    Button btn1;
 
     public Scene secondScene() {
-        mainStackpane= new StackPane();
-
+        mainStackpane = new StackPane();
         // For image and hotel name
         stackPane = new StackPane();
         stackPane.setAlignment(Pos.TOP_CENTER);
@@ -53,25 +54,24 @@ public class SecondScene {
         // Right side VBox for image hotel image
         stackPane.getChildren().addAll(hotelimage, hotelname);
 
-        try {
-            connection = DriverManager.getConnection(url, user, password);
-            System.out.println("Connection established successfully");
-        } catch (Exception e) {
-            System.out.println("Error" + e.getMessage());
-        }
-
+//        try {
+//            connection = DriverManager.getConnection(url, user, password);
+//            System.out.println("Connection established successfully");
+//        } catch (Exception e) {
+//            System.out.println("Error" + e.getMessage());
+//        }
         mainHBox = new HBox();
         ButtonsVBox = new VBox();
         ButtonsVBox.setSpacing(0.5);
 
-        Button btn1 = new Button("New Reservation");
+        btn1 = new Button("New Reservation");
         Button btn2 = new Button("Check Reservation");
         Button btn3 = new Button("Get Room Number");
         Button btn4 = new Button("Update Reservation");
         Button btn5 = new Button("Delete Reservation");
         Button btn6 = new Button("Exit");
 
-        String buttonStyle = "-fx-font-weight: bold; " +
+        buttonStyle = "-fx-font-weight: bold; " +
                 "-fx-font-size: 16px; " +
                 "-fx-background-color: #4CAF50; " +
                 "-fx-text-fill: white; " +
@@ -93,7 +93,7 @@ public class SecondScene {
         btn6.setStyle(buttonStyle);
 
         ButtonsVBox.getChildren().addAll(btn1, btn2, btn3, btn4, btn5, btn6);
-        mainHBox.getChildren().addAll(ButtonsVBox,stackPane);
+        mainHBox.getChildren().addAll(ButtonsVBox, stackPane);
 
         btn1.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
@@ -107,7 +107,8 @@ public class SecondScene {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 System.out.println("hi");
-                String newButtonStyle = buttonStyle.replace("-fx-background-color: #4CAF50;", "-fx-background-color: #FFFF00;")
+                String newButtonStyle = buttonStyle.replace("-fx-background-color: #4CAF50;",
+                                "-fx-background-color: #FFFF00;")
                         .replace("-fx-text-fill: white;", "-fx-text-fill: black;");
                 btn1.setStyle(newButtonStyle);
             }
@@ -117,19 +118,25 @@ public class SecondScene {
             public void handle(ActionEvent actionEvent) {
                 // Update background color dynamically
 
-                String newButtonStyle = buttonStyle.replace("-fx-background-color: #4CAF50;", "-fx-background-color: #FFFF00;")
+                String newButtonStyle = buttonStyle.replace("-fx-background-color: #4CAF50;",
+                                "-fx-background-color: #FFFF00;")
                         .replace("-fx-text-fill: white;", "-fx-text-fill: black;");
                 btn1.setStyle(newButtonStyle);
-                if (vbox1 == null && connection != null) {
-                    NewReservation newReservation = new NewReservation();
-                   newReservation.setSecondScene(SecondScene.this); // Set reference to SecondScene Reuse and Flexibility:
-                    // By passing the instance (SecondScene.this), you can reuse the same SecondScene instance across different
-                    // parts of your application. This promotes code reuse and makes it easier to maintain and extend your application.
-                   // The reason why we pass the instance of SecondScene (SecondScene.this) to NewReservation rather than creating
-                // new instance within NewReservation boils down to how object-oriented design and encapsulation work.
-                    vbox1 = newReservation.newReservation(connection);
-                    mainHBox.getChildren().remove(stackPane);
-                    mainHBox.getChildren().add(vbox1);
+                if (vbox1 == null) {
+                    try {
+                        NewReservation newReservation = new NewReservation();
+                        newReservation.setSecondScene(SecondScene.this);
+                        // Set reference to SecondScene Reuse and Flexibility:
+                        // By passing the instance (SecondScene.this), you can reuse the same SecondScene instance across different
+                        // parts of your application. This promotes code reuse and makes it easier to maintain and extend your application.
+                        // The reason why we pass the instance of SecondScene (SecondScene.this) to NewReservation rather than creating
+                        // new instance within NewReservation boils down to how object-oriented design and encapsulation work.
+                        vbox1 = newReservation.newReservation();
+                        mainHBox.getChildren().remove(stackPane);
+                        mainHBox.getChildren().add(vbox1);
+                    } catch (Exception e){
+                        System.out.println("Error" +e.getMessage());
+                    }
                 }
             }
         });
@@ -137,22 +144,23 @@ public class SecondScene {
         try {
             Image formbg = new Image(getClass().getResourceAsStream("/com/example/hotelreversation/form-bg.jpg"));
             // Set the background image to stackplane1
-            ImageView imageView= new ImageView(formbg);
+            ImageView imageView = new ImageView(formbg);
             imageView.setFitWidth(1130);
             imageView.setFitHeight(650);
             mainStackpane.getChildren().add(imageView);
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Error loading image");
         }
         mainStackpane.getChildren().add(mainHBox);
         Scene scene = new Scene(mainStackpane);
         return scene;
     }
-
     // Method to return to the main menu
     public void showMainMenu() {
+        btn1.setStyle(buttonStyle);
         mainHBox.getChildren().remove(vbox1);
         mainHBox.getChildren().add(stackPane);
         vbox1 = null;
     }
+
 }
