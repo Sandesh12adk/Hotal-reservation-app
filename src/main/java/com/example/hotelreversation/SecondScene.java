@@ -7,15 +7,15 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -26,13 +26,18 @@ public class SecondScene {
     private final String user = "Admin";
     private final String password = "pass123";
     private String buttonStyle;
-
     private StackPane mainStackpane;
-    private StackPane vbox1 = null;  // nam cahi vbox1 nai rakhya hai change gharna jhau xa.
     private HBox mainHBox;
     private StackPane stackPane;
     private VBox ButtonsVBox;
     Button btn1;
+    private StackPane vbox1 = null;  // nam cahi vbox1 nai rakhya hai change gharna jhau xa.
+    private StackPane scrollPane;//   you pani same hai nam cahi vbox1 nai rakhya hai change gharna jhau xa.
+
+
+    // objects of the other classes
+    VIewReservations viewReservations= new VIewReservations();
+
 
     public Scene secondScene() {
         mainStackpane = new StackPane();
@@ -61,6 +66,8 @@ public class SecondScene {
 //            System.out.println("Error" + e.getMessage());
 //        }
         mainHBox = new HBox();
+        mainHBox.setPrefWidth(600); // Set preferred width to 600 pixels
+
         ButtonsVBox = new VBox();
         ButtonsVBox.setSpacing(0.5);
 
@@ -140,7 +147,52 @@ public class SecondScene {
                 }
             }
         });
+        btn2.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                System.out.println("Clicked");
+                try{
+                scrollPane= viewReservations.viewReservation();
+                viewReservations.setSecondScene(SecondScene.this);
+                mainHBox.getChildren().remove(stackPane);
+                mainHBox.getChildren().remove(vbox1);
+                mainStackpane.getChildren().add(scrollPane);
+                vbox1= null;
+            }catch (Exception e) {
+                    System.out.println("Error"+ e.getMessage());
+                }
+                }
+        });
 
+        btn2.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                System.out.println("hi");
+                String newButtonStyle = buttonStyle.replace("-fx-background-color: #4CAF50;",
+                                "-fx-background-color: #FFFF00;")
+                        .replace("-fx-text-fill: white;", "-fx-text-fill: black;");
+                btn2.setStyle(newButtonStyle);
+            }
+        });
+
+        btn2.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+
+                    btn2.setStyle(buttonStyle);
+            }
+        });
+        btn6.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                System.out.println("Button clicked");
+                try {
+                    //new HelloApplication().closeApp(6);
+                }catch (Exception e){
+                    System.out.println("Error"+e.getMessage());
+                }
+            }
+        });
         try {
             Image formbg = new Image(getClass().getResourceAsStream("/com/example/hotelreversation/form-bg.jpg"));
             // Set the background image to stackplane1
@@ -158,9 +210,12 @@ public class SecondScene {
     // Method to return to the main menu
     public void showMainMenu() {
         btn1.setStyle(buttonStyle);
-        mainHBox.getChildren().remove(vbox1);
-        mainHBox.getChildren().add(stackPane);
-        vbox1 = null;
-    }
-
+            mainHBox.getChildren().remove(vbox1);
+            mainHBox.getChildren().add(stackPane);
+            vbox1= null;
+        }
+        public void BackfromviewReservation(){
+            mainStackpane.getChildren().remove(scrollPane);
+            mainHBox.getChildren().add(stackPane);
+        }
 }

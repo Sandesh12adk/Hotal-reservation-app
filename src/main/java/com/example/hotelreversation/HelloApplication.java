@@ -112,12 +112,14 @@ public class HelloApplication extends Application {
         // ************ Create the scene and add the main Hbox in the scene
        Scene scene = new Scene(root, 900, 1900, Color.RED);
 
-        stage.setScene(scene);stage.setWidth(1000);
+        stage.setScene(scene);
+        stage.setWidth(1000);
         stage.setHeight(650);
         stage.setResizable(false); // Make the stage non-resizable
 
         // Show the stage
         stage.show();
+
     }
 
     public static void main(String[] args) {
