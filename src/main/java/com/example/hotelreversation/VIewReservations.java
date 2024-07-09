@@ -26,6 +26,7 @@ public class VIewReservations {
 
     public VIewReservations() {
         gridPane = new GridPane();
+        gridPane.getChildren().clear();
        // gridPane.setPadding(new Insets());
         gridPane.setHgap(10);
        // gridPane.setVgap(0.5);
@@ -42,6 +43,7 @@ public class VIewReservations {
     }
 
     public StackPane viewReservation() {
+        gridPane.getChildren().clear();
         try (Connection connection = DriverManager.getConnection(url, user, password);
              Statement stmt = connection.createStatement();
              ResultSet resultSet = stmt.executeQuery(query)) {

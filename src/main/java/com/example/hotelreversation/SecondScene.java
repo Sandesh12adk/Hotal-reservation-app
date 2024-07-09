@@ -31,10 +31,10 @@ public class SecondScene {
     Button btn1;
     private StackPane vbox1 = null;  // nam cahi vbox1 nai rakhya hai change gharna jhau xa.
     private StackPane scrollPane;//   you pani same hai nam cahi vbox1 nai rakhya hai change gharna jhau xa.
-
+    GridPane gridPane= null; //  Delete reservation ley reutrn gareko GridPane
 
     // objects of the other classes
-    VIewReservations viewReservations= new VIewReservations();
+   VIewReservations viewReservations= new VIewReservations();
 
 
     public Scene secondScene() {
@@ -138,6 +138,9 @@ public class SecondScene {
                         // new instance within NewReservation boils down to how object-oriented design and encapsulation work.
                         vbox1 = newReservation.newReservation();
                         mainHBox.getChildren().remove(stackPane);
+                        mainHBox.getChildren().remove(gridPane);
+                        btn5.setStyle(buttonStyle);
+                        gridPane= null;
                         mainHBox.getChildren().add(vbox1);
                     } catch (Exception e){
                         System.out.println("Error" +e.getMessage());
@@ -154,6 +157,7 @@ public class SecondScene {
                 viewReservations.setSecondScene(SecondScene.this);
                 mainHBox.getChildren().remove(stackPane);
                 mainHBox.getChildren().remove(vbox1);
+                mainHBox.getChildren().remove(gridPane);
                 mainStackpane.getChildren().add(scrollPane);
                 vbox1= null;
             }catch (Exception e) {
@@ -231,7 +235,9 @@ public class SecondScene {
         btn5.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                btn5.setStyle(buttonStyle);
+                if(gridPane== null) {
+                    btn5.setStyle(buttonStyle);
+                }
             }
         });
 
@@ -243,6 +249,19 @@ public class SecondScene {
                                 "-fx-background-color: #FFFF00;")
                         .replace("-fx-text-fill: white;", "-fx-text-fill: black;");
                 btn5.setStyle(newButtonStyle);
+            }
+        });
+        btn5.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                btn1.setStyle(buttonStyle);
+                mainHBox.getChildren().remove(stackPane);
+                mainHBox.getChildren().remove(vbox1);
+                vbox1= null;
+                if(gridPane== null) {
+                    gridPane = new DeleteReservation().Delete();
+                    mainHBox.getChildren().add(gridPane);
+                }
             }
         });
         try {
