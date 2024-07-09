@@ -7,9 +7,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -180,9 +178,20 @@ public class NewReservation {
                 // Simplified validation without room number check
                 if (firstname.isEmpty() || lastname.isEmpty() || address.isEmpty() || !validMobileNumber || !validRoom) {
                     if (!validMobileNumber) {
-                        error = new Label("Invalid mobile number (must be 10 digits)");
+                       error = new Label("Invalid mobile number (must be 10 digits)");
                     } else if (!validRoom) {
-                        error = new Label("Invalid room number or room not available");
+                      error = new Label("Invalid room number or room not available");
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Invalid");
+                       // alert.setHeaderText("Confirm Exit");
+                        alert.setContentText("Room not available");
+
+                        // Handle the result of the dialog
+                        alert.showAndWait().ifPresent(response -> {
+                            if (response == ButtonType.OK) {
+                                System.out.println("Alertbox closed");
+                            }
+                        });
                     } else {
                         error = new Label("Please fill all fields");
                     }

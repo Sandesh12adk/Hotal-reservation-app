@@ -5,9 +5,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -185,12 +183,66 @@ public class SecondScene {
         btn6.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                System.out.println("Button clicked");
-                try {
-                    //new HelloApplication().closeApp(6);
-                }catch (Exception e){
-                    System.out.println("Error"+e.getMessage());
-                }
+                // Create a confirmation dialog
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmation");
+                alert.setHeaderText("Confirm Exit");
+                alert.setContentText("Are you sure you want to exit?");
+
+                // Handle the result of the dialog
+                alert.showAndWait().ifPresent(response -> {
+                    if (response == ButtonType.OK) {
+                        // Perform exit action
+                        System.out.println("Exiting application...");
+                        Stage stage = (Stage) mainStackpane.getScene().getWindow();
+                        /*  mainStackpane: This is presumably a StackPane object in your JavaFX application. mainStackpane is
+                         added to a scene (Scene) which in turn is displayed in a Stage.
+
+                      getScene(): This method retrieves the Scene object that contains mainStackpane.
+
+                      getWindow(): This method returns the window (Window) that is the root of the scene. In JavaFX
+                      , a Stage is a top-level container for your application's UI, and it represents the main window of the application.
+
+                       (Stage): Casts the Window object returned by getWindow() to a Stage. Since a Stage is a subclass of Window in
+                        JavaFX, this cast is safe assuming your application structure adheres to this hierarchy.   */
+                        stage.close(); // Close the main stage (application window)
+                    }
+                });
+            }
+        });
+        btn6.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                    btn6.setStyle(buttonStyle);
+            }
+        });
+
+        btn6.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                System.out.println("hi");
+                String newButtonStyle = buttonStyle.replace("-fx-background-color: #4CAF50;",
+                                "-fx-background-color: #FFFF00;")
+                        .replace("-fx-text-fill: white;", "-fx-text-fill: black;");
+                btn6.setStyle(newButtonStyle);
+            }
+        });
+
+        btn5.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                btn5.setStyle(buttonStyle);
+            }
+        });
+
+        btn5.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                System.out.println("hi");
+                String newButtonStyle = buttonStyle.replace("-fx-background-color: #4CAF50;",
+                                "-fx-background-color: #FFFF00;")
+                        .replace("-fx-text-fill: white;", "-fx-text-fill: black;");
+                btn5.setStyle(newButtonStyle);
             }
         });
         try {

@@ -79,11 +79,11 @@ public class HelloApplication extends Application {
                 String password = passwordField.getText();
 
                 if (password.equals("pass123") && username.equals("Admin")) {
-                    Scene secondscene =new SecondScene().secondScene();
-                    stage.setHeight(650);
-                    stage.setWidth(1130);
-                    stage.setScene(secondscene);
-                    stage.show();
+//                    Scene secondscene =new SecondScene().secondScene();
+//                    stage.setHeight(650);
+//                    stage.setWidth(1130);
+//                    stage.setScene(secondscene);
+//                    stage.show();
                 } else {
                     showtoast(vbox, textField, "Invalid username or password");
                 }
@@ -112,10 +112,16 @@ public class HelloApplication extends Application {
         // ************ Create the scene and add the main Hbox in the scene
        Scene scene = new Scene(root, 900, 1900, Color.RED);
 
-        stage.setScene(scene);
-        stage.setWidth(1000);
+        Scene secondscene =new SecondScene().secondScene();
         stage.setHeight(650);
-        stage.setResizable(false); // Make the stage non-resizable
+        stage.setWidth(1130);
+        stage.setScene(secondscene);
+        stage.show();
+
+//        stage.setScene(scene);
+//        stage.setWidth(1000);
+//        stage.setHeight(650);
+//        stage.setResizable(false); // Make the stage non-resizable
 
         // Show the stage
         stage.show();
