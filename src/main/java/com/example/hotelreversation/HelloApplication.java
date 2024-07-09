@@ -34,7 +34,6 @@ public class HelloApplication extends Application {
         VBox vbox = new VBox();
         vbox.setSpacing(8);
         vbox.setPadding(new Insets(10, 0, 20, 10));
-
         //Hotel logo
 
             Image Hotelimage1 = new Image(getClass().getResourceAsStream("/logo.jpeg"));

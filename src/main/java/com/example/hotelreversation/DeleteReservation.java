@@ -66,13 +66,17 @@ public class DeleteReservation {
         try {
             connection = DriverManager.getConnection(url, user, password);
             String query = "DELETE FROM hotelinfo WHERE room_no = ? AND guest_name = ?";
+
             PreparedStatement pstmt = connection.prepareStatement(query);
+            Statement stmt= connection.createStatement();
+            String query2 = "INSERT INTO room_available(Room_no) VALUES('" + roomNumber + "');";
             pstmt.setInt(1, roomNumber);
             pstmt.setString(2, customerName);
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
                 customerNameField.setText("");
                 roomNumberField.setText("");
+                stmt.executeUpdate(query2);
                 showAlert(Alert.AlertType.INFORMATION, "Success", "Reservation deleted successfully.");
                 // Update room availability (example: insert logic here)
             } else {
