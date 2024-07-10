@@ -72,7 +72,7 @@ public class SecondScene {
         btn1 = new Button("New Reservation");
         Button btn2 = new Button("Check Reservation");
         Button btn3 = new Button("Get Room Number");
-        Button btn4 = new Button("Update Reservation");
+        Button btn4 = new Button("Check-Outs");
         Button btn5 = new Button("Delete Reservation");
         Button btn6 = new Button("Exit");
 
@@ -157,7 +157,9 @@ public class SecondScene {
                 viewReservations.setSecondScene(SecondScene.this);
                 mainHBox.getChildren().remove(stackPane);
                 mainHBox.getChildren().remove(vbox1);
+                vbox1= null;
                 mainHBox.getChildren().remove(gridPane);
+                gridPane= null;
                 mainStackpane.getChildren().add(scrollPane);
                 vbox1= null;
             }catch (Exception e) {

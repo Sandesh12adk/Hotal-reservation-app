@@ -72,6 +72,7 @@ public class DeleteReservation {
             String query2 = "INSERT INTO room_available(Room_no) VALUES('" + roomNumber + "');";
             pstmt.setInt(1, roomNumber);
             pstmt.setString(2, customerName);
+            new CheckOuts().checkOuts(roomNumber);
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
                 customerNameField.setText("");
