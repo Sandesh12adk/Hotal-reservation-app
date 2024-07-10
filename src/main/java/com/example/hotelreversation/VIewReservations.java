@@ -42,7 +42,7 @@ public class VIewReservations {
            this.secondScene= secondScene;
     }
 
-    public StackPane viewReservation() {
+    public StackPane viewReservations() {
         gridPane.getChildren().clear();
         try (Connection connection = DriverManager.getConnection(url, user, password);
              Statement stmt = connection.createStatement();

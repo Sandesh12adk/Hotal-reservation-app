@@ -1,4 +1,6 @@
 package com.example.hotelreversation;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -15,7 +17,11 @@ public class DeleteReservation {
     private final String url = "jdbc:mysql://localhost:3306/hotelinfo";
     private final String user = "Admin";
     private final String password = "pass123";
+    private SecondScene secondscene;
 
+   public DeleteReservation(SecondScene secondscene){
+       this.secondscene= secondscene;
+   }
     public GridPane Delete() {
 
         GridPane gridPane = new GridPane();
@@ -56,8 +62,23 @@ public class DeleteReservation {
                 showAlert(Alert.AlertType.ERROR, "Missing Room Number", "Room Number cannot be empty.");
             }
         });
+        Button backbutton = new Button("Go Back");
+        backbutton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                if (secondscene != null) {
+                    secondscene.BackfromDeletereservation();
+                } else {
+                    System.out.println("SecondScene is not initialized.");
+                }
+            }
+        });
+        backbutton.setStyle("-fx-background-color: blue; -fx-text-fill: white;" +
+                " -fx-background-radius: 30; -fx-padding: 4px 10px 4px 10px; -fx-opacity: 0.7;");
+        GridPane.setConstraints(backbutton, 1, 3); // Set backbutton to first column, fourth row
 
-        gridPane.getChildren().addAll(roomNumberLabel, roomNumberField, customerNameLabel, customerNameField, deleteButton);
+        gridPane.getChildren().addAll(roomNumberLabel, roomNumberField, customerNameLabel,
+                customerNameField, deleteButton,backbutton);
 
         return gridPane;
     }

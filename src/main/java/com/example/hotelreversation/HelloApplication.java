@@ -78,11 +78,11 @@ public class HelloApplication extends Application {
                 String password = passwordField.getText();
 
                 if (password.equals("pass123") && username.equals("Admin")) {
-//                    Scene secondscene =new SecondScene().secondScene();
-//                    stage.setHeight(650);
-//                    stage.setWidth(1130);
-//                    stage.setScene(secondscene);
-//                    stage.show();
+                  Scene secondscene =new SecondScene().secondScene();
+                    stage.setHeight(650);
+                    stage.setWidth(1130);
+                    stage.setScene(secondscene);
+                    stage.show();
                 } else {
                     showtoast(vbox, textField, "Invalid username or password");
                 }
@@ -117,10 +117,10 @@ public class HelloApplication extends Application {
         stage.setScene(secondscene);
         stage.show();
 
-//        stage.setScene(scene);
-//        stage.setWidth(1000);
-//        stage.setHeight(650);
-//        stage.setResizable(false); // Make the stage non-resizable
+        stage.setScene(scene);
+       stage.setWidth(1000);
+       stage.setHeight(650);
+        stage.setResizable(false); // Make the stage non-resizable
 
         // Show the stage
         stage.show();
