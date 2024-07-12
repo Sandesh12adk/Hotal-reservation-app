@@ -283,25 +283,19 @@ class SubmitClass extends Thread {
 
     public void showSuccessMessage() {
         Platform.runLater(() -> {
+            showAlert(Alert.AlertType.INFORMATION, "Success", "New entry has Recorded Successfully");
             textField1.setText("");
             textField2.setText("");
             textField3.setText("");
             textField4.setText("");
             textField5.setText("");
-
-            Label successLabel = new Label("Entry Successful");
-            successLabel.setTextFill(Color.GREEN);
-            successLabel.setFont(Font.font("Arial", 15));
-            vBox.getChildren().add(successLabel);
-
-            // Remove successLabel after 2 seconds
-            Timeline timeline = new Timeline();
-            timeline.getKeyFrames().addAll(
-                    new KeyFrame(Duration.ZERO, new KeyValue(successLabel.opacityProperty(), 1.0)),
-                    new KeyFrame(Duration.seconds(2), new KeyValue(successLabel.opacityProperty(), 0.0))
-            );
-            timeline.setOnFinished(event -> vBox.getChildren().remove(successLabel));
-            timeline.play();
         });
+    }
+    private void showAlert(Alert.AlertType alertType, String title, String content) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

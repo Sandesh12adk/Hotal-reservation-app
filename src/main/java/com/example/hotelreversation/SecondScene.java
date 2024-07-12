@@ -32,10 +32,12 @@ public class SecondScene {
     private StackPane vbox1 = null;
     private StackPane scrollPane, ScrollPane2;
     private GridPane gridPane = null;
+    private VBox cvbox= null;
 
     // Object of the other classes
     private VIewReservations viewReservations = new VIewReservations();
     private ViewCHeckouts viewCHeckouts = new ViewCHeckouts();
+    private Customize customize= new Customize();
 
     public Scene secondScene() {
         mainStackpane = new StackPane();
@@ -92,7 +94,7 @@ public class SecondScene {
         btn5.setStyle(buttonStyle);
         btn6.setStyle(buttonStyle);
 
-        ButtonsVBox.getChildren().addAll(btn1, btn2, btn4, btn5, btn6,btn3);
+        ButtonsVBox.getChildren().addAll(btn1, btn2, btn4, btn5, btn3,btn6);
         mainHBox.getChildren().addAll(ButtonsVBox, stackPane);
 
         btn1.setOnMouseExited(event -> {
@@ -113,6 +115,12 @@ public class SecondScene {
                             "-fx-background-color: #FFFF00;")
                     .replace("-fx-text-fill: white;", "-fx-text-fill: black;");
             btn1.setStyle(newButtonStyle);
+            btn2.setStyle(buttonStyle);
+            btn3.setStyle(buttonStyle);
+            btn4.setStyle(buttonStyle);
+            btn5.setStyle(buttonStyle);
+            btn6.setStyle(buttonStyle);
+
             if (vbox1 == null) {
                 try {
                     NewReservation newReservation = new NewReservation();
@@ -124,6 +132,8 @@ public class SecondScene {
                     btn5.setStyle(buttonStyle);
                     gridPane = null;
                     mainHBox.getChildren().add(vbox1);
+                    mainHBox.getChildren().remove(cvbox);
+                    cvbox= null;
                 } catch (Exception e) {
                     System.out.println("Error" + e.getMessage());
                 }
@@ -141,6 +151,8 @@ public class SecondScene {
                     vbox1 = null;
                     mainHBox.getChildren().remove(gridPane);
                     gridPane = null;
+                    mainHBox.getChildren().remove(cvbox);
+                    cvbox= null;
                     mainStackpane.getChildren().add(scrollPane);
                 } catch (Exception e) {
                     System.out.println("Error" + e.getMessage());
@@ -200,10 +212,16 @@ public class SecondScene {
 
         btn5.setOnAction(event -> {
             btn1.setStyle(buttonStyle);
+            btn3.setStyle(buttonStyle);
+            btn4.setStyle(buttonStyle);
+            btn6.setStyle(buttonStyle);
+
             if (gridPane == null) {
             mainHBox.getChildren().remove(stackPane);
             mainHBox.getChildren().remove(vbox1);
             vbox1 = null;
+                mainHBox.getChildren().remove(cvbox);
+                cvbox= null;
                 gridPane = new DeleteReservation(SecondScene.this).Delete();
                 mainHBox.getChildren().add(gridPane);
             }
@@ -220,6 +238,8 @@ public class SecondScene {
                     vbox1 = null;
                     mainHBox.getChildren().remove(gridPane);
                     gridPane = null;
+                    mainHBox.getChildren().remove(cvbox);
+                    cvbox= null;
                     mainStackpane.getChildren().add(ScrollPane2);
                 } catch (Exception e) {
                     System.out.println("Error" + e.getMessage());
@@ -238,7 +258,40 @@ public class SecondScene {
                     .replace("-fx-text-fill: white;", "-fx-text-fill: black;");
             btn4.setStyle(newButtonStyle);
         });
+        btn3.setOnMouseExited(event -> {
+            if(cvbox== null) {
+                btn3.setStyle(buttonStyle);
+            }
 
+        });
+
+        btn3.setOnMouseEntered(event -> {
+            String newButtonStyle = buttonStyle.replace("-fx-background-color: #4CAF50;",
+                            "-fx-background-color: #FFFF00;")
+                    .replace("-fx-text-fill: white;", "-fx-text-fill: black;");
+            btn3.setStyle(newButtonStyle);
+        });
+        btn3.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                btn1.setStyle(buttonStyle);
+                btn4.setStyle(buttonStyle);
+                btn5.setStyle(buttonStyle);
+                if(cvbox== null) {
+                    mainHBox.getChildren().remove(stackPane);
+                    mainHBox.getChildren().remove(gridPane);
+                    gridPane= null;
+                    mainHBox.getChildren().remove(vbox1);
+                    vbox1= null;
+                    mainHBox.getChildren().remove(scrollPane);
+                    scrollPane= null;
+                   mainStackpane.getChildren().remove(ScrollPane2);
+                    ScrollPane2= null;
+                    cvbox = customize.addAnddeleteRooms(SecondScene.this);
+                    mainHBox.getChildren().add(cvbox);
+                }
+            }
+        });
         try {
             Image formbg = new Image(getClass().getResourceAsStream("/com/example/hotelreversation/form-bg.jpg"));
             ImageView imageView = new ImageView(formbg);
@@ -279,6 +332,20 @@ public class SecondScene {
         vbox1= null;
         mainHBox.getChildren().remove(ScrollPane2);
         ScrollPane2= null;
+        mainHBox.getChildren().remove(cvbox);
+        cvbox= null;
+        mainHBox.getChildren().add(stackPane);   // Add back the main menu stackPane
+
+    }
+    public void BackfromCustomize() {
+        mainHBox.getChildren().remove(gridPane);
+        gridPane= null;// Remove the GridPane containing delete reservation functionality
+        mainHBox.getChildren().remove(vbox1);
+        vbox1= null;
+        mainHBox.getChildren().remove(ScrollPane2);
+        ScrollPane2= null;
+        mainHBox.getChildren().remove(cvbox);
+        cvbox= null;
         mainHBox.getChildren().add(stackPane);   // Add back the main menu stackPane
 
     }

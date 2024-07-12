@@ -7,8 +7,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import java.sql.*;
@@ -132,9 +131,13 @@ public class VIewReservations {
         backbutton.setTextFill(Color.WHITE);
 
         stackPane= new StackPane();
+        BackgroundFill backgroundFill = new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY);
+        Background background = new Background(backgroundFill);
+        stackPane.setBackground(background);
         StackPane.setAlignment(backbutton, Pos.BOTTOM_LEFT);
         stackPane.getChildren().add(scrollPane);
         stackPane.getChildren().add(backbutton);
+
         return stackPane;
     }
 }

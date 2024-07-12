@@ -9,10 +9,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -26,8 +23,17 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.sql.*;
 
 public class HelloApplication extends Application {
+    private final String url = "jdbc:mysql://localhost:3306/hotelinfo";
+    private final String user = "Admin";
+    private final String passwordd = "pass123";
+    private ResultSet resultset = null;
+    private Connection connection = null;
+    private PreparedStatement stmt = null;
+    String password;
+
     @Override
     public void start(Stage stage) throws IOException {
         //**************login page
@@ -36,8 +42,8 @@ public class HelloApplication extends Application {
         vbox.setPadding(new Insets(10, 0, 20, 10));
         //Hotel logo
 
-            Image Hotelimage1 = new Image(getClass().getResourceAsStream("/logo.jpeg"));
-            ImageView hotellogo = new ImageView(Hotelimage1);
+        Image Hotelimage1 = new Image(getClass().getResourceAsStream("/logo.jpeg"));
+        ImageView hotellogo = new ImageView(Hotelimage1);
 
 
         //Hotel Name
@@ -74,23 +80,33 @@ public class HelloApplication extends Application {
         loginbutton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                establishConnection();
+                getPassword(); /////////////////////////////////////////////////////////////////////////////////////
                 String username = textField.getText();
-                String password = passwordField.getText();
-
-                if (password.equals("pass123") && username.equals("Admin")) {
-                  Scene secondscene =new SecondScene().secondScene();
+                String passworddd = passwordField.getText();
+                if (passworddd.equals(password) && username.equals("Admin")) {
+                    Scene secondscene = new SecondScene().secondScene();
                     stage.setHeight(650);
                     stage.setWidth(1130);
                     stage.setScene(secondscene);
                     stage.show();
                 } else {
                     showtoast(vbox, textField, "Invalid username or password");
+                    showAlert(Alert.AlertType.INFORMATION, "Cannot login", "Wrong username or password");
                 }
             }
         });
-
+        Button forgetpassword = new Button("Forget Password");
+        forgetpassword.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                ForgetPassword forgetPassword = new ForgetPassword(new Stage());
+                forgetPassword.show();
+            }
+        });
+        VBox.setMargin(forgetpassword, new Insets(5, 0, 0, 70));  // Ma
         // Adding above controls to the vbox
-        vbox.getChildren().addAll(hotelname,hotellogo, label1, textField, label2, passwordField, loginbutton);
+        vbox.getChildren().addAll(hotelname, hotellogo, label1, textField, label2, passwordField, loginbutton, forgetpassword);
         // Increase left margin of loginbutton by 50 pixels
         VBox.setMargin(loginbutton, new Insets(0, 0, 0, 70));
 
@@ -109,17 +125,17 @@ public class HelloApplication extends Application {
         root.getChildren().addAll(hbox, vbox);
 
         // ************ Create the scene and add the main Hbox in the scene
-       Scene scene = new Scene(root, 900, 1900, Color.RED);
+        Scene scene = new Scene(root, 900, 1900, Color.RED);
 
-        Scene secondscene =new SecondScene().secondScene();
+        Scene secondscene = new SecondScene().secondScene();
         stage.setHeight(650);
         stage.setWidth(1130);
         stage.setScene(secondscene);
         stage.show();
 
         stage.setScene(scene);
-       stage.setWidth(1000);
-       stage.setHeight(650);
+        stage.setWidth(1000);
+        stage.setHeight(650);
         stage.setResizable(false); // Make the stage non-resizable
 
         // Show the stage
@@ -131,38 +147,77 @@ public class HelloApplication extends Application {
         launch();
     }
 
-        private Label toast = null; // Initialize toast to null
+    private Label toast = null; // Initialize toast to null
 
-        public void showtoast(VBox vbox, TextField textField, String message) {
-            if (toast == null) {
-                // Create the toast label only if it is not already created
-                toast = new Label(message);
-                toast.setTextFill(Color.RED);
-                vbox.getChildren().add(toast);
-            } 
-
-            // Remove toast when user interacts with textField
-            textField.setOnKeyTyped(event -> {
-                fadeOutAndRemove();
-            });
+    public void showtoast(VBox vbox, TextField textField, String message) {
+        if (toast == null) {
+            // Create the toast label only if it is not already created
+            toast = new Label(message);
+            toast.setTextFill(Color.RED);
+            vbox.getChildren().add(toast);
         }
 
-        private void fadeOutAndRemove() {
-            if (toast != null) {
-                Timeline timeline = new Timeline();
-                timeline.getKeyFrames().addAll(
-                        new KeyFrame(Duration.ZERO, new KeyValue(toast.opacityProperty(), 1.0)),
-                        new KeyFrame(Duration.seconds(1), new KeyValue(toast.opacityProperty(), 0.0))
-                );
-                timeline.setOnFinished(event -> {
-                    VBox parent = (VBox) toast.getParent();
-                    if (parent != null) {
-                        parent.getChildren().remove(toast);
-                        toast = null; // Reset toast to null after removal
-                    }
-                });
-                timeline.play();
+        // Remove toast when user interacts with textField
+        textField.setOnKeyTyped(event -> {
+            fadeOutAndRemove();
+        });
+    }
+
+    private void fadeOutAndRemove() {
+        if (toast != null) {
+            Timeline timeline = new Timeline();
+            timeline.getKeyFrames().addAll(
+                    new KeyFrame(Duration.ZERO, new KeyValue(toast.opacityProperty(), 1.0)),
+                    new KeyFrame(Duration.seconds(1), new KeyValue(toast.opacityProperty(), 0.0))
+            );
+            timeline.setOnFinished(event -> {
+                VBox parent = (VBox) toast.getParent();
+                if (parent != null) {
+                    parent.getChildren().remove(toast);
+                    toast = null; // Reset toast to null after removal
+                }
+            });
+            timeline.play();
+        }
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String content) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    public void establishConnection() {
+        System.out.println("establishConnection called");
+        try {
+            String query = "SELECT * FROM password";
+            connection = DriverManager.getConnection(url, user, passwordd);
+            stmt = connection.prepareStatement(query);
+            resultset = stmt.executeQuery();
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    public void getPassword() {
+        System.out.println("getpassword called");
+        try {
+                 resultset.next();
+                 password = resultset.getString("PASS");
+                System.out.println("Password: " + password);
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            try {
+                if (resultset != null) resultset.close();
+                if (stmt != null) stmt.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                System.out.println("Error: " + e.getMessage());
             }
         }
+    }
 
 }
